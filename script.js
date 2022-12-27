@@ -4,7 +4,6 @@ const display = document.querySelector('.calculator__screen');
 const numButton = document.querySelectorAll('.calc__num__button');
 const clearButton = document.querySelector('.calculator__button__clear');
 const calcOperators = document.querySelectorAll('.calc__operator');
-let operatorSymbol;
 let numArray = [];
 let currentNum = "";
 
@@ -12,17 +11,38 @@ numButton.forEach(num => {
     num.addEventListener('click', () => {
         currentNum += num.textContent;
         updateDisplay(currentNum);
-        // console.log(currentNum);           // displays number to console
     });
 });
 
 calcOperators.forEach(operator => {
     operator.addEventListener('click', () => { 
-        numArray.push(+currentNum);
-        operatorSymbol = operator.textContent;
-        operate(numArray, operatorSymbol);
-        currentNum = "";
-        // console.log(...numArray);   
+
+        let operatorSymbol = operator.textContent;
+
+        if (operatorSymbol === '='){
+            numArray.push(+currentNum);
+            operate(numArray);
+            numArray.length = 0;
+        }
+
+        else if (numArray.length < 2){
+            numArray.push(+currentNum);
+            numArray.push(operatorSymbol);
+            updateDisplay(+currentNum);
+            currentNum = "";
+        }
+
+        else {
+            numArray.push(+currentNum);
+            operate(numArray);
+            numArray.length = 0;
+            numArray.push(+currentNum);
+            numArray.push(operatorSymbol);
+            currentNum = "";
+        }
+
+        console.log(...numArray);
+
     })
 })
 
@@ -34,19 +54,51 @@ function updateDisplay(nums) {
     display.textContent = nums;
 }
 
-function operate(nums, operator) {
-    let temp = 0;
-    nums.forEach(num => {
-        if (operator == '+'){
-            temp += +num;
-            console.log(temp);
-        }
-    })
-    currentNum =+ temp;
+function add(a, b){
+    return a + b;
+}
+
+function subtract(a, b){
+    return a - b;
+}
+
+function multiply(a, b){
+    return a * b;
+}
+
+function divide(a, b){
+    if (b == 0){
+        window.location.href = "https://youtu.be/tQPtKNZpfz4";
+        return 'no...';
+    }
+    else {
+        return a / b;
+    }
+}
+
+function operate(nums) {
+
+    if (nums[1] == '*') {
+        currentNum = multiply(nums[0], nums[2]);
+    }
+
+    if (nums[1] == '/') {
+        currentNum = divide(nums[0], nums[2]);
+    }
+
+    if (nums[1] == '+') {
+        currentNum = add(nums[0], nums[2]);
+    }
+
+    if (nums[1] == '-') {
+        currentNum = subtract(nums[0], nums[2]);
+    }
+    
     updateDisplay(currentNum);
 }
 
 function clear() {
     currentNum = "";
+    numArray.length = 0;
     updateDisplay(currentNum);
 }
