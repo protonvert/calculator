@@ -4,6 +4,7 @@ const display = document.querySelector('.calculator__screen');
 const numButton = document.querySelectorAll('.calc__num__button');
 const clearButton = document.querySelector('.calculator__button__clear');
 const calcOperators = document.querySelectorAll('.calc__operator');
+const deleteButton = document.querySelector('.calculator__button__delete');
 let numArray = [];
 let currentNum = "";
 
@@ -14,8 +15,12 @@ numButton.forEach(num => {
     });
 });
 
+
+
 calcOperators.forEach(operator => {
     operator.addEventListener('click', () => { 
+
+        console.log(numArray);
 
         let operatorSymbol = operator.textContent;
 
@@ -46,9 +51,9 @@ calcOperators.forEach(operator => {
     })
 })
 
-clearButton.addEventListener('click', () => {
-    clear();
-})
+deleteButton.addEventListener('click', deleteDigit);
+
+clearButton.addEventListener('click', clear);
 
 function updateDisplay(nums) {
     display.textContent = nums;
@@ -100,5 +105,11 @@ function operate(nums) {
 function clear() {
     currentNum = "";
     numArray.length = 0;
+    updateDisplay(currentNum);
+}
+
+function deleteDigit() {
+    currentNum = currentNum.substring(0, currentNum.length - 1);
+    console.log(currentNum);
     updateDisplay(currentNum);
 }
